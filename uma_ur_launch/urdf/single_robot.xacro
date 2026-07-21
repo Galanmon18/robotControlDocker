@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="my_work_cell">
+  <!--Load the macro for creating a robot-->
+  <xacro:include filename="$(find ur_description)/urdf/inc/ur3e_macro.xacro"/>
+
+  <!--Instanciate the robots-->
+  <xacro:ur3e_robot prefix="darel_" kinematics_parameters_file="$(arg darel_kinematics)"/>
+
+  <!--common link where the tf tree originates from-->
+  <link name="world"/>
+
+  <!--Define the robot poses in the world-->
+  <joint name="world_to_teleop" type="fixed">
+    <parent link="world" />
+    <child link = "darel_base_link" />
+    <origin xyz="-0.8 0 0" rpy="0 0 0" />
+  </joint>
+</robot>

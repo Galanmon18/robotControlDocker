@@ -1,0 +1,5 @@
+# Laparoscopic instrument — Z axis
+# tool_length and p_estimado are substituted at launch time
+tcp: [0.0, 0.0, 0.34, 0.0, 0.0, 0.0]   # [x, y, z, rx, ry, rz]
+dfp: [0.0, 0.0, 0.15, 0.0, 0.0, 0.0]   # [x, y, z, rx, ry, rz]
+length_axis: 2  #where 0->x, 1->y, 2->z

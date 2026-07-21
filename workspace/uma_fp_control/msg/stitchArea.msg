@@ -1,0 +1,3 @@
+geometry_msgs/Point insertion
+geometry_msgs/Point extraction
+geometry_msgs/Point change

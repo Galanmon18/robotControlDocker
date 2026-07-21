@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="my_work_cell">
+  <!--Load the macro for creating a robot-->
+  <xacro:include filename="$(find ur_description)/urdf/inc/ur3_macro.xacro"/>
+  <xacro:include filename="$(find ur_description)/urdf/inc/ur3e_macro.xacro"/>
+
+  <!--Instanciate the robots-->
+  <xacro:ur3_robot prefix="auto_" kinematics_parameters_file="$(arg auto_kinematics)"/>
+  <xacro:ur3_robot prefix="teleop_" kinematics_parameters_file="$(arg teleop_kinematics)" />
+
+  <!--common link where the tf tree originates from-->
+  <link name="world"/>
+
+  <!--Define the robot poses in the world-->
+  <joint name="world_to_teleop" type="fixed">
+    <parent link="world" />
+    <child link = "teleop_base_link" />
+    <origin xyz="-0.5 0 0" rpy="0 0 0" />
+  </joint>
+  <joint name="world_to_auto" type="fixed">
+    <parent link="world" />
+    <child link = "auto_base_link" />
+    <origin xyz="0.5 0 0" rpy="0 0 0" />
+  </joint>
+</robot>

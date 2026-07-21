@@ -1,0 +1,15 @@
+services:
+  ros-robot:
+    image: ur-ros-driver
+    container_name: ros-robot
+    network_mode: host
+    privileged: true
+    stdin_open: true
+    tty: true
+    command: sleep infinity
+    volumes:
+      - ./workspace:/catkin_ws/user_ws/src
+      - /home/alvaro/.ros:/root/.ros
+    environment:
+      - ROS_MASTER_URI=http://localhost:11311
+      - ROS_IP=127.0.0.1

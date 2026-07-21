@@ -1,0 +1,95 @@
+<launch>
+  <!-- ================================================================
+       two_fp_robot.launch — Launch two robot control nodes.
+
+        "Control strategy: rotationMatrix | jacobianThesis | complianceThesis"
+       Examples:
+         roslaunch uma_fp_control two_fp_control.launch
+         roslaunch uma_fp_control two_fp_control.launch \
+           prefix_1:=auto  control_type_1:=rotationMatrix \
+           prefix_2:=darel control_type_2:=complianceThesis
+         roslaunch uma_fp_control two_fp_robot.launch \
+           tool_config_1:=$(rospack find uma_fp_control)/config/tools/tool_z_axis.yaml \
+           tool_config_2:=$(rospack find uma_fp_control)/config/tools/camera.yaml
+  ================================================================ -->
+
+  <!--  Robot 1  -->
+  <arg name="prefix_1"          default="auto"/>
+  <arg name="control_type_1"    default="rotationMatrix"/>
+  <arg name="kp_1"              default="1.0"/>
+  <arg name="ki_1"              default="0.0"/>
+  <arg name="kd_1"              default="0.0"/>
+  <arg name="kf_1"              default="0.175"/>
+  <arg name="tool_length_1"     default="0.34"/>
+  <arg name="p_estimado_1"      default="0.225"/>
+  <arg name="tool_config_1"     default="$(find uma_fp_control)/config/tools/tool_z_axis.yaml"/>
+  <arg name="sensor_ip_1"       default="192.168.1.1"/>
+  <arg name="abdomen_source_1"    default="none"/> <!-- sensor | topic | none -->
+  <arg name="abdomen_sensor_ip_1" default="192.168.1.1"/>
+  <arg name="move_to_init_1"    default="true"/> 
+  <arg name="base_1"            default="105.98"/>
+  <arg name="shoulder_1"        default="-81.02"/>
+  <arg name="elbow_1"           default="-116.14"/>
+  <arg name="wrist1_1"          default="-63.54"/>
+  <arg name="wrist2_1"          default="130.19"/>
+  <arg name="wrist3_1"          default="0.0"/>
+
+  <!--  Robot 2  -->
+  <arg name="prefix_2"            default="teleop"/>
+  <arg name="control_type_2"      default="rotationMatrix"/>
+  <arg name="kp_2"                default="1.0"/>
+  <arg name="tool_length_2"       default="0.305"/>
+  <arg name="p_estimado_2"        default="0.19"/>
+  <arg name="tool_config_2"       default="$(find uma_fp_control)/config/tools/tool_z_axis.yaml"/>
+  <arg name="sensor_ip_2"         default="192.168.1.200"/>
+  <arg name="abdomen_source_2"    default="none"/>
+  <arg name="abdomen_sensor_ip_2" default="192.168.1.200"/>
+  <arg name="move_to_init_2"    default="true"/>
+  <arg name="base_2"              default="-114.41"/>
+  <arg name="shoulder_2"          default="-58.7"/>
+  <arg name="elbow_2"             default="126.77"/>
+  <arg name="wrist1_2"            default="-169.18"/>
+  <arg name="wrist2_2"            default="229.08"/>
+  <arg name="wrist3_2"            default="34.29"/>
+
+  <!--  Robot 1 node  -->
+  <include file="$(find uma_fp_control)/launch/robot.launch">
+    <arg name="prefix"            value="$(arg prefix_1)"/>
+    <arg name="control_type"      value="$(arg control_type_1)"/>
+    <arg name="kp"                value="$(arg kp_1)"/>
+    <arg name="tool_length"       value="$(arg tool_length_1)"/>
+    <arg name="p_estimado"        value="$(arg p_estimado_1)"/>
+    <arg name="tool_config"       value="$(arg tool_config_1)"/>
+    <arg name="sensor_ip"         value="$(arg sensor_ip_1)"/>
+    <arg name="abdomen_source"    value="$(arg abdomen_source_1)"/>
+    <arg name="abdomen_sensor_ip" value="$(arg abdomen_sensor_ip_1)"/>
+    <arg name="move_to_init"      value="$(arg move_to_init_1)"/>
+    <arg name="base"              value="$(arg base_1)"/>
+    <arg name="shoulder"          value="$(arg shoulder_1)"/>
+    <arg name="elbow"             value="$(arg elbow_1)"/>
+    <arg name="wrist1"            value="$(arg wrist1_1)"/>
+    <arg name="wrist2"            value="$(arg wrist2_1)"/>
+    <arg name="wrist3"            value="$(arg wrist3_1)"/>
+  </include>
+
+  <!--  Robot 2 node  -->
+  <include file="$(find uma_fp_control)/launch/robot.launch">
+    <arg name="prefix"            value="$(arg prefix_2)"/>
+    <arg name="control_type"      value="$(arg control_type_2)"/>
+    <arg name="kp"                value="$(arg kp_2)"/>
+    <arg name="tool_length"       value="$(arg tool_length_2)"/>
+    <arg name="p_estimado"        value="$(arg p_estimado_2)"/>
+    <arg name="tool_config"       value="$(arg tool_config_2)"/>
+    <arg name="sensor_ip"         value="$(arg sensor_ip_2)"/>
+    <arg name="abdomen_source"    value="$(arg abdomen_source_2)"/>
+    <arg name="abdomen_sensor_ip" value="$(arg abdomen_sensor_ip_2)"/>
+    <arg name="move_to_init"      value="$(arg move_to_init_2)"/>
+    <arg name="base"              value="$(arg base_2)"/>
+    <arg name="shoulder"          value="$(arg shoulder_2)"/>
+    <arg name="elbow"             value="$(arg elbow_2)"/>
+    <arg name="wrist1"            value="$(arg wrist1_2)"/>
+    <arg name="wrist2"            value="$(arg wrist2_2)"/>
+    <arg name="wrist3"            value="$(arg wrist3_2)"/>
+  </include>
+
+</launch>

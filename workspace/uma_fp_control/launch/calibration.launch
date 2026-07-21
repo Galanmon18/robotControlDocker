@@ -1,0 +1,21 @@
+<launch>
+    <arg name="prefix_auto" default="auto"/>
+    <arg name="prefix_teleop" default="teleop"/>
+    <arg name="tool_length" default="0.013"/> <!-- default="0.013" -->
+    <!-- ROBOT ALEJANDRO -->
+    <group ns="$(arg prefix_auto)">
+        <remap from="/ur_hardware_interface/script_command" to="/$(arg prefix_auto)/ur_hardware_interface/script_command" />
+        <node name="calibration" pkg="uma_fp_control" type="calibration" output="screen">
+            <param name="prefix" value="$(arg prefix_auto)" type="str"/>
+            <param name="tool_length" value="$(arg tool_length)" type="double"/>
+        </node>
+    </group>
+    <!-- ROBOT DAREL -->
+    <group ns="$(arg prefix_teleop)">
+        <remap from="/ur_hardware_interface/script_command" to="/$(arg prefix_teleop)/ur_hardware_interface/script_command" />
+        <node name="calibration" pkg="uma_fp_control" type="calibration" output="screen">
+            <param name="prefix" value="$(arg prefix_teleop)" type="str"/>
+            <param name="tool_length" value="$(arg tool_length)" type="double"/>
+        </node>
+    </group>
+</launch>

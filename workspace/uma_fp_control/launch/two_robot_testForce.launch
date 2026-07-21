@@ -1,0 +1,74 @@
+<launch>
+    <arg name="prefix_auto" default="auto"/>
+    <arg name="prefix_teleop" default="darel"/>
+    <arg name="kp" default="1.0"/>
+    <arg name="ki" default="0.0"/>
+    <arg name="kd" default="0.0"/>
+    <arg name="kf" default="0.0"/>
+    <arg name="p_estimado" default="0.2"/>
+    <arg name="tool_length" default="0.34"/>
+    <arg name="type" default="1"/>
+    <arg name="sensor_ip" default="192.168.1.1"/>
+    <arg name="base" default="0"/>
+    <arg name="shoulder" default="-90"/>
+    <arg name="elbow" default="-90"/>
+    <arg name="wrist1" default="-90"/>
+    <arg name="wrist2" default="90"/>
+    <arg name="wrist3" default="0"/>
+    <!-- COORDINATOR -->
+    <param name="robot_names" type="string" value="$(arg prefix_auto),$(arg prefix_teleop)"/>
+    <param name="transform_matrix_csv_path" value="$(find uma_fp_control)/config/auto2darel.csv"/>
+    <node pkg="uma_fp_control" type="coordinatorForce" name="coordinator_node" output="screen"/>
+    <!-- ROBOT ALICE -->
+    <group ns="$(arg prefix_auto)">
+        <remap from="/ur_hardware_interface/script_command" to="/$(arg prefix_auto)/ur_hardware_interface/script_command" />
+        <node name="MyhybridControl" pkg="uma_fp_control" type="hybridControl" output="screen"> <!-- <node name="MyControlForce" pkg="uma_fp_control" type="jacobianControl forceControl" output="screen"> -->
+            <param name="prefix" value="$(arg prefix_auto)" type="str"/>
+            <param name="kp" value="$(arg kp)"  type="double"/>
+            <param name="ki" value="$(arg ki)" type="double"/>
+            <param name="kd" value="0" type="double"/>
+            <param name="kf" value="$(arg kf)" type="double"/>
+            <param name="p_estimado" value="$(arg p_estimado)" type="double"/>
+            <param name="tool_length" value="$(arg tool_length)" type="double"/>
+            <param name="type" value="1" type="int"/>
+            <param name="sensor_ip" value="$(arg sensor_ip)" type="str"/>
+            <param name="base" value="$(arg base)"  type="double"/>
+            <param name="shoulder" value="$(arg shoulder)"  type="double"/>
+            <param name="elbow" value="$(arg elbow)"  type="double"/>
+            <param name="wrist1" value="$(arg wrist1)"  type="double"/>
+            <param name="wrist2" value="$(arg wrist2)"  type="double"/>
+            <param name="wrist3" value="$(arg wrist3)"  type="double"/>
+        </node>
+    </group>
+    <!--<group ns="$(arg prefix_auto)">
+        <remap from="/ur_hardware_interface/script_command" to="/$(arg prefix_auto)/ur_hardware_interface/script_command" />
+        <node name="testForces" pkg="uma_fp_control" type="testForces" output="screen">
+            <param name="prefix" value="$(arg prefix_auto)" type="str"/>
+            <param name="p_estimado" value="0.1" type="double"/>
+            <param name="tool_length" value="$(arg tool_length)" type="double"/>
+            <param name="type" value="1" type="int"/>
+            <param name="sensor_ip" value="$(arg sensor_ip)" type="str"/>
+            <param name="base" value="$(arg base)"  type="double"/>
+            <param name="shoulder" value="$(arg shoulder)"  type="double"/>
+            <param name="elbow" value="$(arg elbow)"  type="double"/>
+            <param name="wrist1" value="$(arg wrist1)"  type="double"/>
+            <param name="wrist2" value="$(arg wrist2)"  type="double"/>
+            <param name="wrist3" value="$(arg wrist3)"  type="double"/>
+        </node>
+    </group>-->
+    <!-- ROBOT BOB -->
+    <!-- <arg name="base" default="-2.45"/>
+    <arg name="shoulder" default="-70.18"/>
+    <arg name="elbow" default="126.78"/>
+    <arg name="wrist1" default="-146.71"/>
+    <arg name="wrist2" default="90"/>
+    <arg name="wrist3" default="177"/>-->
+    <group ns="$(arg prefix_teleop)">
+        <remap from="/ur_hardware_interface/script_command" to="/$(arg prefix_teleop)/ur_hardware_interface/script_command" />
+        <node name="abdomenForces" pkg="uma_fp_control" type="abdomenForces" output="screen">
+            <param name="prefix" value="$(arg prefix_teleop)" type="str"/>
+            <param name="tool_length" value="0" type="double"/>
+            <param name="type" value="3" type="int"/>
+        </node>
+    </group>
+</launch>

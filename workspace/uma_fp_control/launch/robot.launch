@@ -1,0 +1,105 @@
+<launch>
+  <!-- ================================================================
+       robot.launch — Single robot control node.
+       Include this file once per robot in one_fp_control.launch,
+       two_fp_control.launch, etc.
+
+       Usage example (included from another launch):
+         <include file="$(find uma_fp_control)/launch/robot.launch">
+           <arg name="prefix"       value="auto"/>
+           <arg name="control_type" value="complianceThesis"/>
+         </include>
+  ================================================================ -->
+
+  <!--  Identity  -->
+  <arg name="prefix"        doc="Robot namespace (e.g. auto, darel, alice)"/>
+  <arg name="control_type"  default="rotationMatrix"
+       doc="Control strategy: rotationMatrix | jacobianThesis | complianceThesis"/>
+
+  <!--  PID gains  -->
+  <arg name="kp" default="1.0"   doc="Proportional gain — main tuning knob"/>
+  <arg name="ki" default="0.0"   doc="Integral gain — leave at 0 unless steady-state offset"/>
+  <arg name="kd" default="0.0"   doc="Derivative gain — usually 0 for velocity-controlled robots"/>
+  <arg name="kf" default="0.175" doc="Feed-forward gain (reserved, not active in control loop)"/>
+
+  <!--  Tool and trocar geometry  -->
+  <arg name="tool_length" default="0.34"
+       doc="Total instrument length flange-to-tip (m)"/>
+  <arg name="p_estimado"  default="0.15"
+       doc="Initial flange-to-trocar distance estimate (m). Affects E_T_Fp at startup."/>
+  <arg name="tool_config"
+       default="$(find uma_fp_control)/config/tools/tool_z_axis.yaml"/>
+       
+  <!-- Carga el YAML bajo /<prefix>/tool/ -->
+  <rosparam file="$(arg tool_config)" command="load"
+       ns="$(arg prefix)/tool"/>
+
+  <!--  Initial movement  -->
+  <arg name="move_to_init" default="true"
+       doc="If false, skip the initial movement to home position.
+            Useful when robot is already in place or during development."/>
+
+  <!--  F/T sensor — tissue (distal)  -->
+  <arg name="sensor_ip" default="192.168.1.100"
+       doc="IP of the distal F/T sensor (tissue force, ATI UDP protocol)"/>
+
+  <!--  Abdominal force source  -->
+  <arg name="abdomen_source"     default="topic"
+       doc="Abdominal force input: sensor | topic | none.
+            sensor — UDP F/T at abdomen_sensor_ip (blocks 8 ms per cycle).
+            topic  — subscribes to /abdomen_force (use with abdomenForceSensorMock).
+            none   — forceAbdomen = 0 (second robot or baseline experiment)."/>
+  <arg name="abdomen_sensor_ip"  default="192.168.1.1"
+       doc="IP of the proximal F/T sensor (abdominal force). Only used if abdomen_source=sensor."/>
+
+  <!--  Initial joint configuration (degrees)  -->
+  <arg name="base"     default="90.0"   doc="Joint 1 — base rotation (deg)"/>
+  <arg name="shoulder" default="-90.0"  doc="Joint 2 — shoulder (deg)"/>
+  <arg name="elbow"    default="90.0"   doc="Joint 3 — elbow (deg)"/>
+  <arg name="wrist1"   default="-90.0"  doc="Joint 4 — wrist 1 (deg)"/>
+  <arg name="wrist2"   default="-90.0"  doc="Joint 5 — wrist 2 (deg)"/>
+  <arg name="wrist3"   default="0.0"    doc="Joint 6 — wrist 3 / tool rotation (deg)"/>
+
+  <!-- ================================================================
+       Control node
+  ================================================================ -->
+  <group ns="$(arg prefix)">
+    <remap from="/ur_hardware_interface/script_command"
+           to="/$(arg prefix)/ur_hardware_interface/script_command"/>
+
+    <node name="MyControl" pkg="uma_fp_control"
+          type="$(arg control_type)" output="screen">
+
+      <!-- Identity -->
+      <param name="prefix"           value="$(arg prefix)"           type="str"/>
+
+      <!-- PID -->
+      <param name="kp"               value="$(arg kp)"               type="double"/>
+      <param name="ki"               value="$(arg ki)"               type="double"/>
+      <param name="kd"               value="$(arg kd)"               type="double"/>
+      <param name="kf"               value="$(arg kf)"               type="double"/>
+
+      <!-- Tool geometry -->
+      <param name="tool_length"      value="$(arg tool_length)"      type="double"/>
+      <param name="p_estimado"       value="$(arg p_estimado)"       type="double"/>
+
+      <!-- Tissue sensor -->
+      <param name="sensor_ip"        value="$(arg sensor_ip)"        type="str"/>
+
+      <!-- Abdominal force -->
+      <param name="abdomen_source"    value="$(arg abdomen_source)"   type="str"/>
+      <param name="abdomen_sensor_ip" value="$(arg abdomen_sensor_ip)" type="str"/>
+
+      <!-- Initial joint configuration -->
+      <param name="move_to_init" value="$(arg move_to_init)" type="bool"/>
+      <param name="base"             value="$(arg base)"             type="double"/>
+      <param name="shoulder"         value="$(arg shoulder)"         type="double"/>
+      <param name="elbow"            value="$(arg elbow)"            type="double"/>
+      <param name="wrist1"           value="$(arg wrist1)"           type="double"/>
+      <param name="wrist2"           value="$(arg wrist2)"           type="double"/>
+      <param name="wrist3"           value="$(arg wrist3)"           type="double"/>
+
+    </node>
+  </group>
+
+</launch>

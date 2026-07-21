@@ -1,0 +1,44 @@
+<launch>
+<node name="temporalMock"
+        pkg="uma_fp_control"
+        type="temporalMock"
+        output="screen" />
+  <!-- Grabación de  -->
+  <node name="record_robot_force" pkg="rosbag" type="record" output="screen" args="--duration=20s -O /home/alvaro/Music/robot_force /auto/effectorFinal_force" />
+  <node name="record_base_force" pkg="rosbag" type="record" output="screen" args="--duration=20s -O /home/alvaro/Music/base_force /auto/robotbase_force" />
+
+  <!-- Grabación de  -->
+  <node name="record_tissue_force" pkg="rosbag" type="record" output="screen" args="--duration=20s -O /home/alvaro/Music/tissue_force /auto/MyJacobianControl/tissue_force" />
+
+  <!-- Grabación de /auto/velocity_topic -->
+  <node name="record_velocity" pkg="rosbag" type="record" output="screen" args="--duration=20s -O /home/alvaro/Music/velocity /auto/velocity_topic" />
+
+  <!-- Grabación de /*/pose_topic -->
+  <node name="record_pose" pkg="rosbag" type="record" output="screen" args="--duration=20s -O /home/alvaro/Music/tip_tool_position /auto/pose_topic" />
+  <node name="record_DAREL_pose" pkg="rosbag" type="record" output="screen" args="--duration=20s -O /home/alvaro/Music/DAREL_tip_tool_position /darel/pose_topic" />
+
+  <!-- Grabación de /auto/effectorFinal_topic -->
+  <node name="record_effector" pkg="rosbag" type="record" output="screen" args="--duration=20s -O /home/alvaro/Music/end_effector_position /auto/effectorFinal_topic" />
+
+  <!-- Grabación de /auto/fulcrum -->
+  <node name="record_fulcrum" pkg="rosbag" type="record" output="screen" args="--duration=20s -O /home/alvaro/Music/fulcrum /auto/fulcrum" />
+
+  <!-- Grabación de maxwell -->
+  <node name="record_maxwell" pkg="rosbag" type="record" output="screen" args="--duration=20s -O /home/alvaro/Music/maxwell /auto/dist_velocity_topic" />
+  <node name="record_maxwell_force" pkg="rosbag" type="record" output="screen" args="--duration=20s -O /home/alvaro/Music/maxwell_force /tissueForce_topic" />
+
+  <!-- Grabación de fuerza fulcro -->
+  <node name="record_force_fulcrum" pkg="rosbag" type="record" output="screen" args="--duration=20s -O /home/alvaro/Music/fulcrum_forces /ur3e/rtde/force" />
+  
+  <node name="record_force_fulcrum2" pkg="rosbag" type="record" output="screen" args="--duration=20s -O /home/alvaro/Music/fulcrum_forces_2 /darel/abdomen_force_topic" />
+  <node name="record_force_fulcrum_effectorFinal" pkg="rosbag" type="record" output="screen" args="--duration=20s -O /home/alvaro/Music/fulcrum_forces_effectorFinal /darel/abdomen_effectorForce_topic" />
+
+  <!-- Grabación de /auto/polar/current -->
+  <node name="record_polar_current" pkg="rosbag" type="record" output="screen" args="--duration=20s -O /home/alvaro/Music/current_polar /auto/polar/current" />
+
+  <!-- Grabación de /auto/polar/des -->
+  <node name="record_polar_des" pkg="rosbag" type="record" output="screen" args="--duration=20s -O /home/alvaro/Music/des_polar /auto/polar/des" />
+
+  <!-- Grabación de /auto/polar/delta -->
+  <node name="record_polar_delta" pkg="rosbag" type="record" output="screen" args="--duration=20s -O /home/alvaro/Music/delta_polar /auto/polar/delta" />
+</launch>

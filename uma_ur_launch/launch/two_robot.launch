@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<launch>
+  <!--Auto arguments-->
+  <arg name="auto_kinematics" default="$(find uma_ur_launch)/etc/ex-ur3-auto_calibration.yaml"/>
+  <arg name="auto_controller_config_file" default="$(find ur_robot_driver)/config/auto_controllers.yaml"/>
+  <arg name="auto_ip" default="192.168.1.20"/>
+  <arg name="auto_reverse_port" default="60001"/>
+  <arg name="auto_script_sender_port" default="60002"/>
+  <arg name="auto_trajectory_port" default="60003"/>
+  <arg name="auto_script_command_port" default="60004"/> #new add
+
+  <!--Darel arguments-->
+  <arg name="darel_kinematics" default="$(find uma_ur_launch)/etc/ex-ur3e-darel_calibration.yaml"/>
+  <arg name="darel_controller_config_file" default="$(find ur_robot_driver)/config/darel_controllers.yaml"/>
+  <arg name="darel_ip" default="192.168.1.50"/>
+  <arg name="darel_reverse_port" default="50001"/>
+  <arg name="darel_script_sender_port" default="50002"/>
+  <arg name="darel_trajectory_port" default="50003"/>
+  <arg name="darel_script_command_port" default="50004"/> #new add
+
+  <!--common arguments-->
+  <arg name="use_tool_communication" default="false"/>
+  <arg name="controllers" default="joint_state_controller scaled_pos_joint_traj_controller speed_scaling_state_controller force_torque_sensor_controller" doc="Controllers that are activated by default."/>
+  <arg name="stopped_controllers" default="pos_joint_traj_controller joint_group_vel_controller" doc="Controllers that are initally loaded, but not started."/>
+
+  <!--Esto lo meto yo, en el orginal hacen esto para la kinematic: -->
+  <include file="$(find uma_ur_launch)/launch/load_two_robot_description.launch">
+    <arg name="auto_kinematics" value="$(arg auto_kinematics)"/>
+    <arg name="darel_kinematics" value="$(arg darel_kinematics)"/>
+  </include>
+
+  <group ns="auto">
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+    <include file="$(find ur_robot_driver)/launch/ur_control.launch">
+      <arg name="use_tool_communication" value="$(arg use_tool_communication)"/>
+      <arg name="controller_config_file" value="$(arg auto_controller_config_file)"/>
+      <arg name="robot_ip" value="$(arg auto_ip)"/>
+      <arg name="reverse_port" value="$(arg auto_reverse_port)"/>
+      <arg name="script_sender_port" value="$(arg auto_script_sender_port)"/>
+      <arg name="trajectory_port" value="$(arg auto_trajectory_port)"/>
+      <arg name="script_command_port" value="$(arg auto_script_command_port)"/>
+      <arg name="kinematics_config" value="$(arg auto_kinematics)"/>
+      <arg name="tf_prefix" value="auto_"/>
+      <arg name="controllers" value="$(arg controllers)"/>
+      <arg name="stopped_controllers" value="$(arg stopped_controllers)"/>
+    </include>
+  </group>
+
+  <group ns="darel">
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+    <include file="$(find ur_robot_driver)/launch/ur_control.launch">
+      <arg name="use_tool_communication" value="$(arg use_tool_communication)"/>
+      <arg name="controller_config_file" value="$(arg darel_controller_config_file)"/>
+      <arg name="robot_ip" value="$(arg darel_ip)"/>
+      <arg name="reverse_port" value="$(arg darel_reverse_port)"/>
+      <arg name="script_sender_port" value="$(arg darel_script_sender_port)"/>
+      <arg name="trajectory_port" value="$(arg darel_trajectory_port)"/>
+      <arg name="script_command_port" value="$(arg darel_script_command_port)"/>
+      <arg name="kinematics_config" value="$(arg darel_kinematics)"/>
+      <arg name="tf_prefix" value="darel_"/>
+      <arg name="controllers" value="$(arg controllers)"/>
+      <arg name="stopped_controllers" value="$(arg stopped_controllers)"/>
+    </include>
+  </group>
+
+  <!--Convenience stuff for demo purposes-->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find ur_example_dual_robot)/etc/view_robot.rviz" required="true" />
+  <node name="rqt_joint_trajectory_controller" pkg="rqt_joint_trajectory_controller" type="rqt_joint_trajectory_controller" respawn="false" output="screen">
+  </node>
+</launch>

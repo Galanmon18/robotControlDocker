@@ -1,0 +1,15 @@
+<launch>
+  
+  <group ns="ur3auto">
+    <remap from="/follow_joint_trajectory" to="scaled_pos_traj_controller/follow_joint_trajectory"/>
+    <include file="$(find ur3_moveit_config)/launch/move_group.launch">
+    </include>
+  </group>
+
+  <group ns="ur3teleop">
+    <remap from="/follow_joint_trajectory" to="scaled_pos_traj_controller/follow_joint_trajectory"/>
+    <include file="$(find ur3_moveit_config)/launch/move_group.launch">
+    </include>
+  </group>
+
+</launch>

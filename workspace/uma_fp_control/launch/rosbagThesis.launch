@@ -1,0 +1,27 @@
+<launch>
+<node name="temporalMock"
+        pkg="uma_fp_control"
+        type="temporalMock"
+        output="screen" />
+  <!-- Grabación de fuerza abdomen -->
+  <node name="record_abdomen_force" pkg="rosbag" type="record" output="screen" args="--duration=70s -O /home/alvaro/Music/abdomen_force /abdomen_force" />
+
+  <!-- Grabación de fuerza tejido -->
+  <node name="record_tissue_force" pkg="rosbag" type="record" output="screen" args="--duration=70s -O /home/alvaro/Music/tissue_force /tissue_force" />
+
+  <!-- Grabación de /alice/velocity_topic -->
+  <node name="record_velocity" pkg="rosbag" type="record" output="screen" args="--duration=70s -O /home/alvaro/Music/velocity /alice/velocity_topic" />
+
+  <!-- Grabación de /*/pose_topic -->
+  <node name="record_pose" pkg="rosbag" type="record" output="screen" args="--duration=70s -O /home/alvaro/Music/tip_tool_position /alice/pose_topic" />
+
+  <!-- Grabación de /alice/effectorFinal_topic -->
+  <node name="record_effector" pkg="rosbag" type="record" output="screen" args="--duration=70s -O /home/alvaro/Music/end_effector_position /alice/effectorFinal_topic" />
+
+  <!-- Grabación de /alice/fulcrum -->
+  <node name="record_fulcrum" pkg="rosbag" type="record" output="screen" args="--duration=70s -O /home/alvaro/Music/fulcrum /alice/fulcrum" />
+
+  <!-- Grabación de /goal position -->
+  <node name="record_goal" pkg="rosbag" type="record" output="screen" args="--duration=70s -O /home/alvaro/Music/goal /alice/coordinator/goal_position" />
+
+</launch>
