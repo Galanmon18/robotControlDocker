@@ -143,3 +143,23 @@ cd /catkin_ws/user_ws && catkin_make
 ```
 
 No image rebuild needed.
+
+---
+
+## Robot Control Package
+
+The main robot control software is located in:
+
+```text
+workspace/uma_fp_control/
+```
+
+This package contains all the controllers, force control algorithms, launch files, and utilities developed during the thesis. It also includes its own dedicated `README.md` with detailed documentation describing the available executables, controller architectures, launch files, configuration, and package structure.
+
+Refer to:
+
+```text
+workspace/uma_fp_control/README.md
+```
+
+for detailed information about the robot control framework.
