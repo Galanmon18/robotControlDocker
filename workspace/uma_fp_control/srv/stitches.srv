@@ -1,6 +1,0 @@
- bool sutured
----
- int64 stitches
- int64 cloudPoints
- float32[] stitchesPosition
- int64 Kstitches

@@ -67,9 +67,9 @@ find_package(Boost REQUIRED COMPONENTS system filesystem date_time thread)
 
 ## Generate messages in the 'msg' folder
 add_message_files(FILES
-  ftResponse.msg
-  zeroSensorpetition.msg
-  stitchArea.msg
+  ##ftResponse.msg
+  ##zeroSensorpetition.msg
+  ##stitchArea.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -282,21 +282,10 @@ add_executable(${PROJECT_NAME}_coordinatorONE src/coordinatorOneRobot.cpp)
 set_target_properties(${PROJECT_NAME}_coordinatorONE PROPERTIES OUTPUT_NAME coordinatorONE PREFIX "")
 target_link_libraries(${PROJECT_NAME}_coordinatorONE ${catkin_LIBRARIES})
 
-add_executable(${PROJECT_NAME}_coordinatorServojTeleop src/coordinatorRobot_TeleopServoj.cpp)
-set_target_properties(${PROJECT_NAME}_coordinatorServojTeleop PROPERTIES OUTPUT_NAME coordinatorServojTeleop PREFIX "")
-target_link_libraries(${PROJECT_NAME}_coordinatorServojTeleop ${catkin_LIBRARIES})
-#coordinatorTwoRobot_InputByTeleop
-add_executable(${PROJECT_NAME}_coordinatorTeleop src/coordinatorTwoRobot_InputByTeleop.cpp)
-set_target_properties(${PROJECT_NAME}_coordinatorTeleop PROPERTIES OUTPUT_NAME coordinatorTeleop PREFIX "")
-target_link_libraries(${PROJECT_NAME}_coordinatorTeleop ${catkin_LIBRARIES})
 #identificador sistema robot
 add_executable(${PROJECT_NAME}_identificador src/identificarSistema.cpp)
 set_target_properties(${PROJECT_NAME}_identificador PROPERTIES OUTPUT_NAME identificador PREFIX "")
 target_link_libraries(${PROJECT_NAME}_identificador ${catkin_LIBRARIES})
-#
-add_executable(${PROJECT_NAME}_coordinatorForce src/coordinatorForceTest_twoRobot.cpp)
-set_target_properties(${PROJECT_NAME}_coordinatorForce PROPERTIES OUTPUT_NAME coordinatorForce PREFIX "")
-target_link_libraries(${PROJECT_NAME}_coordinatorForce ${catkin_LIBRARIES})
 # HAPTIC
 add_executable(${PROJECT_NAME}_hapticMock mocks/teleoperacionKeyboard.cpp)
 set_target_properties(${PROJECT_NAME}_hapticMock PROPERTIES OUTPUT_NAME hapticMock PREFIX "")
