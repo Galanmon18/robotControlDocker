@@ -146,6 +146,44 @@ No image rebuild needed.
 
 ---
 
+## Launching the Robots
+
+Before running any controller, the communication with the robot(s) must be started by launching one of the files in `uma_ur_launch`:
+
+```bash
+roslaunch uma_ur_launch <launch_file>.launch
+```
+
+Available launch files include:
+
+- `ex-ur3-auto.launch` — launches a single UR3 using the `auto` namespace.
+- `ex-ur3-teleop.launch` — launches a single UR3 using the `teleop` namespace.
+- `ur3e-darel.launch` — launches a single UR3w using the `darel` namespace.
+- `ex-ur3-combi2.launch` — launches two UR3 robots (`auto` and `teleop` namespaces).
+- `two_robot.launch` — launches one UR3 (`auto`) and one UR3e (`darel` namespace).
+
+The namespace names are defined inside each launch file and can be modified if required for your setup.
+
+### Start MoveIt
+
+After launching the robot drivers, start the corresponding MoveIt instance **once**:
+
+For a UR3:
+
+```bash
+roslaunch ur3_moveit_config move_group.launch
+```
+
+For a UR3e:
+
+```bash
+roslaunch ur3e_moveit_config move_group.launch
+```
+
+Only one `move_group` instance should be running, even if multiple robots are being used.
+
+---
+
 ## Robot Control Package
 
 The main robot control software is located in:
