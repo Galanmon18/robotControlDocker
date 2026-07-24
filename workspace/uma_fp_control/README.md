@@ -25,24 +25,22 @@ Each layer only depends on the layers below it. A `service` may use `dependecies
 Three interchangeable control executables share the same launch interface:
 
 ### `rotationMatrix`
-Hybrid position + force controller with **geometrically imposed RCM** (Remote Center of Motion). Each control cycle, the desired TCP orientation is constructed so that the instrument Z-axis points from the estimated fulcrum toward the desired TTP position, forcing the instrument to pivot around the trocar. Abdominal forces are summed as a flee velocity on top of the position command. Tissue force feedback limits penetration via an integral setpoint modifier.
+Hybrid position–force controller based on **geometric RCM enforcement**. Two independent hybrid loops are executed simultaneously:
+
+- **Instrument tip:** position control with tissue force feedback, where tissue forces modify the insertion setpoint to regulate interaction with the tissue.
+- **Fulcrum:** position control with abdominal force feedback, where abdominal forces correct the desired fulcrum position.
+
+The desired TCP orientation is then computed from the corrected instrument tip position and the corrected fulcrum position, ensuring that the instrument shaft always passes through the desired RCM.
 
 Key modules: `RCMGeometry`, `TipForceController`, `AbdomenForceController`.
 
 ### `jacobianThesis`
-Architecturally equivalent to `rotationMatrix`. The abdominal force flee velocity was the primary development focus of this executable. Both share the same RCM geometric constraint.
+Hybrid position–force controller sharing the same tip controller as `rotationMatrix`. The instrument tip is regulated through position control with tissue force feedback. Unlike `rotationMatrix`, abdominal forces are **not** used to modify the fulcrum position. Instead, they are converted into a linear "flee" velocity along the measured force direction, causing the robot to move away from excessive abdominal contact while the RCM geometric constraint is maintained.
 
 Key modules: `RCMGeometry`, `TipForceController`, `AbdomenForceController`.
 
 ### `complianceThesis`
-**Decoupled** hybrid controller where the RCM constraint is **not imposed geometrically**. The position loop drives the instrument linearly toward the goal. Abdominal forces generate desired tilt angles via the compliance law:
-
-```
-θ_x = F_x / (K_abd · (L − ρ))
-θ_y = F_y / (K_abd · (L − ρ))
-```
-
-where `L` is the total instrument length and `ρ` is the external segment (trocar to flange, measured by `abdomenForceSensorMock`). The RCM constraint emerges from physical contact with the trocar rather than from a known fulcrum position. Robust to fulcrum estimation errors.
+Fully hybrid position–force controller without explicit geometric RCM enforcement. The position controller generates the desired **linear velocity** toward the target, while abdominal force feedback generates **angular velocity** according to a compliance law. Rather than enforcing a known fulcrum position, the instrument naturally pivots about the trocar through physical interaction with the abdominal wall, making the controller independent of fulcrum estimation.
 
 Key modules: `TipForceController`, `AbdomenComplianceController`.
 
