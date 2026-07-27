@@ -15,7 +15,7 @@
 
   <!--  Robot 1  -->
   <arg name="prefix_1"          default="auto"/>
-  <arg name="control_type_1"    default="rotationMatrix"/>
+  <arg name="control_type_1"    default="jacobianThesis"/>
   <arg name="kp_1"              default="1.0"/>
   <arg name="ki_1"              default="0.0"/>
   <arg name="kd_1"              default="0.0"/>
@@ -35,7 +35,7 @@
   <arg name="wrist3_1"          default="0.0"/>
 
   <!--  Robot 2  -->
-  <arg name="prefix_2"            default="teleop"/>
+  <arg name="prefix_2"            default="darel"/>
   <arg name="control_type_2"      default="complianceThesis"/>
   <arg name="kp_2"                default="1.0"/>
   <arg name="tool_length_2"       default="0.305"/>

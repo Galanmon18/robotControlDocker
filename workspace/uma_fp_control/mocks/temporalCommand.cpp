@@ -68,7 +68,7 @@ int main(int argc, char **argv){
         "/auto/coordinator/goal_position", 1000);
 
     ros::Publisher pub_goal_abdomen = nh.advertise<geometry_msgs::Point>(
-        "/teleop/coordinator/goal_position", 1000);
+        "/darel/coordinator/goal_position", 1000);
 
     ros::Publisher pub_perturb = nh.advertise<std_msgs::Float64MultiArray>(
         "/fulcrum_perturbation", 10);

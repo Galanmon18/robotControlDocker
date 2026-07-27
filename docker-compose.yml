@@ -9,6 +9,7 @@ services:
     command: sleep infinity
     volumes:
       - ./workspace:/catkin_ws/user_ws/src
+      - ./uma_ur_launch:/catkin_ws/src/uma_ur_launch
       - /home/alvaro/.ros:/root/.ros
     environment:
       - ROS_MASTER_URI=http://localhost:11311

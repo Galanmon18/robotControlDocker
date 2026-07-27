@@ -66,7 +66,7 @@
   </group>
 
   <!--Convenience stuff for demo purposes-->
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find ur_example_dual_robot)/etc/view_robot.rviz" required="true" />
+  <!--Convenience stuff for demo purposes-->
   <node name="rqt_joint_trajectory_controller" pkg="rqt_joint_trajectory_controller" type="rqt_joint_trajectory_controller" respawn="false" output="screen">
   </node>
 </launch>

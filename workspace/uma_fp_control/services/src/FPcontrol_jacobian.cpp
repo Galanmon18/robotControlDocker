@@ -154,9 +154,9 @@ void hybridControl::updateTransforms(){
  * @brief Returns true if abdominal forces are within the safe range (<1 N all axes).
  */
 bool hybridControl::isAbdomenSafe() const {
-    return (std::abs(forceAbdomen[0]) < 0.8) &&
-           (std::abs(forceAbdomen[1]) < 0.8) &&
-           (std::abs(forceAbdomen[2]) < 0.8);
+    return (std::abs(forceAbdomen[0]) < 1) &&
+           (std::abs(forceAbdomen[1]) < 1) &&
+           (std::abs(forceAbdomen[2]) < 1);
 }
 
 // =============================================================================
@@ -317,7 +317,7 @@ geometry_msgs::Point hybridControl::computeFulcrum(Eigen::MatrixXd E_T_Fp, Eigen
 
 void hybridControl::initializeRobot(int type, double p_estimado_init, double tool_length, bool move_to_init,
                                     std::vector<double> initPosition){
-    std::cout << "Initialising robot J..." << std::endl;
+    std::cout << "Initialising robot RM..." << std::endl;
     if (move_to_init) {
         ur->set_tcp(tool0);
         ros::Duration(0.5).sleep();
@@ -330,18 +330,32 @@ void hybridControl::initializeRobot(int type, double p_estimado_init, double too
         ros::Duration(0.5).sleep();
         ur->stopl(1); 
     }
-    tool->computeTwrist(type, p_estimado_init, tool_length, tr);
-    E_T_Fp = tool->E_T_Fp;
-    TCP    = tool->TCP;
+    std::vector<double> tcp;
+    std::vector<double> dfp;
+    int length_axis;
+    ros::param::get("/" + prefix_in + "/tool/tcp", tcp);
+    ros::param::get("/" + prefix_in + "/tool/dfp", dfp);
+    ros::param::get("/" + prefix_in + "/tool/length_axis",length_axis);
+    tcp[length_axis] = tool_length;
+    dfp[length_axis] = p_estimado_init;
+    Eigen::MatrixXd rot       = tr->rotZ(tcp[5]) * tr->rotY(tcp[4]) * tr->rotX(tcp[3]);
+    //E_T_TTP = tr->desp({tcp[0], tcp[1], tcp[2]}) * rot;
+    E_T_Fp  = tr->desp({dfp[0], dfp[1], dfp[2]}) * rot;
+    TCP     = tcp;
+    //tool->computeTwrist(type, p_estimado_init, tool_length, tr);
+    //E_T_Fp = tool->E_T_Fp;
+    //TCP    = tool->TCP;
+    std::cout << "TCP: " << TCP[0] << ", " << TCP[1] << ", " << TCP[2]  << ", " << TCP[3] << ", " << TCP[4] << ", " << TCP[5] << std::endl;
     ur->set_tcp(TCP);
+    ros::Duration(1).sleep();
     newFulcrum = true;
-    ros::Duration(0.5).sleep();
     if (!abdomenSensor_) {
         std::cerr << "abdomenSensor_ is NULL\n";
     } else {
         std::cout << "abdomenSensor_ OK\n";
         if (abdomenSensor_->tareSensor()) {
             std::cout << "Sensor tared successfully\n";
+            ros::Duration(0.2).sleep();
         } else {
             std::cerr << "Failed to tare sensor\n";
         }

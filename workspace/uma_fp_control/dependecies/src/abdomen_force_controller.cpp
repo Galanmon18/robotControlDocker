@@ -29,7 +29,7 @@ std::vector<double> AbdomenForceController::compute(const std::vector<double>& f
             integral_[i] *= 0.9;  // Decay integrator when below threshold
             continue;
         }
-        std::cout << "ENTRO AbdomenForceController::compute"<< std::endl;
+        std::cout << "----------------------------------------ENTRO AbdomenForceController::compute"<< std::endl;
         active_ = true;
 
         // e_F = -f (desired = 0, flee direction opposes force)
@@ -45,7 +45,7 @@ std::vector<double> AbdomenForceController::compute(const std::vector<double>& f
         // Per-axis saturation
         v = std::max(-v_max_, std::min(v_max_, v));
 
-        v_correction[i] = -v;
+        v_correction[i] = v; // I still don’t know why, if I read the force from the sensor, it’s v, but if it’s via the topic, it’s -v. I don’t know. BE CAREFUL
     }
 
     if (active_) {

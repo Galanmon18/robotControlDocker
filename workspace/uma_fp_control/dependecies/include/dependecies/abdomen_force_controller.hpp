@@ -36,7 +36,7 @@ public:
     explicit AbdomenForceController(double Kp        = 0.04,
                                     double Ki        = 0.0,
                                     double dt        = 1.0/125.0,
-                                    double threshold = 0.8,
+                                    double threshold = 1,
                                     double v_max     = 0.05);
 
     /**
