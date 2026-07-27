@@ -24,7 +24,7 @@
   <arg name="p_estimado_1"      default="0.225"/>
   <arg name="tool_config_1"     default="$(find uma_fp_control)/config/tools/tool_z_axis.yaml"/>
   <arg name="sensor_ip_1"       default="192.168.1.1"/>
-  <arg name="abdomen_source_1"    default="none"/> <!-- sensor | topic | none -->
+  <arg name="abdomen_source_1"    default="sensor"/> <!-- sensor | topic | none -->
   <arg name="abdomen_sensor_ip_1" default="192.168.1.1"/>
   <arg name="move_to_init_1"    default="true"/> 
   <arg name="base_1"            default="105.98"/>
@@ -36,10 +36,10 @@
 
   <!--  Robot 2  -->
   <arg name="prefix_2"            default="teleop"/>
-  <arg name="control_type_2"      default="rotationMatrix"/>
+  <arg name="control_type_2"      default="complianceThesis"/>
   <arg name="kp_2"                default="1.0"/>
   <arg name="tool_length_2"       default="0.305"/>
-  <arg name="p_estimado_2"        default="0.19"/>
+  <arg name="p_estimado_2"        default="0.0"/>
   <arg name="tool_config_2"       default="$(find uma_fp_control)/config/tools/tool_z_axis.yaml"/>
   <arg name="sensor_ip_2"         default="192.168.1.200"/>
   <arg name="abdomen_source_2"    default="none"/>

@@ -67,6 +67,9 @@ int main(int argc, char **argv){
     ros::Publisher pub_goal = nh.advertise<geometry_msgs::Point>(
         "/auto/coordinator/goal_position", 1000);
 
+    ros::Publisher pub_goal_abdomen = nh.advertise<geometry_msgs::Point>(
+        "/teleop/coordinator/goal_position", 1000);
+
     ros::Publisher pub_perturb = nh.advertise<std_msgs::Float64MultiArray>(
         "/fulcrum_perturbation", 10);
 
@@ -86,21 +89,22 @@ int main(int argc, char **argv){
     puntos[3] = makePoint(0.128, -0.273, -0.034); //68
     puntos[4] = makePoint(0.128, -0.294, -0.015);
     puntos[5] = makePoint(0.128, -0.317, -0.034);*/
-    std::vector<geometry_msgs::Point> puntos(6);
-    puntos[0] = makePoint(0.303,  0.102, -0.026);
-    puntos[1] = makePoint(0.303,  0.102, -0.026); //0.35
-    puntos[2] = makePoint(0.303,  0.102, -0.026); 
-    puntos[3] = makePoint(0.303,  0.102, -0.026); 
-    puntos[4] = makePoint(0.303,  0.102, -0.026); 
-    puntos[5] = makePoint(0.303,  0.102, -0.026); 
 
-    /*std::vector<geometry_msgs::Point> puntos(6);
-    puntos[0] = makePoint(0.305,0.131,0.037); //74
-    puntos[1] = makePoint(0.305,0.131,0.02);
-    puntos[2] = makePoint(0.305,0.131,0.02);
-    puntos[3] = makePoint(0.305,0.131,0.02); //68
-    puntos[4] = makePoint(0.305,0.131,0.02);
-    puntos[5] = makePoint(0.305,0.131,0.02);*/
+    std::vector<geometry_msgs::Point> puntos(6);
+    puntos[0] = makePoint(-0.245, 0.251, 0.019);
+    puntos[1] = makePoint(-0.245, 0.251, 0.019);//-0.0525
+    puntos[2] = makePoint(-0.242, 0.25, -0.003); 
+    puntos[3] = makePoint(-0.245, 0.251, 0.019);
+    puntos[4] = makePoint(-0.245, 0.251, 0.019); 
+    puntos[5] = makePoint(-0.245, 0.251, 0.019);
+    std::vector<geometry_msgs::Point> puntos_abdomen(6);
+    puntos_abdomen[0] = makePoint(0.28, 0.253, -0.120); //186
+    puntos_abdomen[1] = makePoint(0.278, 0.25, -0.142);
+    puntos_abdomen[2] = makePoint(0.278, 0.25, -0.142); 
+    puntos_abdomen[3] = makePoint(0.278, 0.25, -0.142);
+    puntos_abdomen[4] = makePoint(0.28, 0.253, -0.120); 
+    puntos_abdomen[5] = makePoint(0.28, 0.253, -0.120);
+
 
     std::vector<GoalEvent> goal_events;
     for (size_t i = 0; i < puntos.size(); i++){
@@ -108,6 +112,14 @@ int main(int argc, char **argv){
         ev.time = start_delay + i * intervalo;
         ev.p    = puntos[i];
         goal_events.push_back(ev);
+    }
+
+    std::vector<GoalEvent> goal_events_abdomen;
+    for (size_t i = 0; i < puntos_abdomen.size(); i++){
+        GoalEvent ev_abdomen;
+        ev_abdomen.time = start_delay + i * intervalo;
+        ev_abdomen.p    = puntos_abdomen[i];
+        goal_events_abdomen.push_back(ev_abdomen);
     }
 
     // ========================================================================
@@ -174,6 +186,15 @@ int main(int argc, char **argv){
             if (!ev.sent && elapsed >= ev.time){
                 pub_goal.publish(ev.p);
                 ROS_INFO("Goal = [%.3f, %.3f, %.3f] at t=%.2f s",
+                         ev.p.x, ev.p.y, ev.p.z, elapsed);
+                ev.sent = true;
+            }
+        }
+
+        for (auto& ev : goal_events_abdomen){
+            if (!ev.sent && elapsed >= ev.time){
+                pub_goal_abdomen.publish(ev.p);
+                ROS_INFO("Goal abdomen = [%.3f, %.3f, %.3f] at t=%.2f s",
                          ev.p.x, ev.p.y, ev.p.z, elapsed);
                 ev.sent = true;
             }

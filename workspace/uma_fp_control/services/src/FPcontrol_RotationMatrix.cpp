@@ -233,6 +233,7 @@ void hybridControl::updateFulcrumState(){
     if (!isAbdomenSafe()) {
         // Abdominal contact detected: recompute fulcrum from current kinematics. Displacement from previous cycle acording to the force in the abdomen
         //step 1: make P_f_ coincident with I. rho_abd is the distance from the {6} to the abdomen
+        //std::cout << "NO SAFE ABDOMEN DETECTED: " <<forceAbdomen[0] << ", " << forceAbdomen[1] << ", " << forceAbdomen[2] << std::endl;
         double K_adbomen = 0.005;
         Eigen::MatrixXd E_T_Fp_corrected = tr->desp({0,0,rho_abd});
         fulcrum_position = computeFulcrum(E_T_Fp_corrected, T_E);

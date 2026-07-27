@@ -57,8 +57,8 @@ std::array<double,2> AbdomenComplianceController::compute(double Fx, double Fy,
     const double wx = Kp_ * e_x + Ki_ * theta_x_int_;
     const double wy = Kp_ * e_y + Ki_ * theta_y_int_;
 
-    std::cout << "Compliance | θx_des=" << theta_x_des_ << " θx_cur=" << theta_x_cur_
-              << " | wx=" << wx << " wy=" << wy << std::endl;
+    /*std::cout << "Compliance | θx_des=" << theta_x_des_ << " θx_cur=" << theta_x_cur_
+              << " | wx=" << wx << " wy=" << wy << std::endl;*/
 
     return {wx, wy};
 }
